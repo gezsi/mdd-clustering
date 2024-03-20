@@ -19,7 +19,7 @@ The R scripts in this repository are designed to run within an R environment. Ke
 
 ### Additional Software
 
-- **bnmcmc**: Our clustering pipeline incorporates the `bnmcmc` software, specifically developed for this project and operational only on Unix/Linux systems. The software's necessary libraries are statically linked, ensuring ease of use across Unix/Linux environments without the need for additional installations.
+- **bnmcmc**: Our clustering pipeline incorporates the `bnmcmc` software that performs Bayesian Direct Multimorbidity Mapping (BDMM) calculations, working only on Unix/Linux systems. The software's necessary libraries are statically linked, ensuring ease of use across Unix/Linux environments without the need for additional installations.
 
 ### R Packages
 
@@ -182,12 +182,12 @@ Options:
 ### Expected Run Time
 The execution time for the `check_dataset.R` script can last several hours, which can be reduced to several minutes by disabling the creation of plots (`--no-plot` argument).
 
-## Step 2: Data Transformation and calculation of relevance scores using inhomogeneous dynamic Bayesian Networks
+## Step 2: Data Transformation and Calculation of Relevance Scores Using Inhomogeneous Dynamic Bayesian Networks
 This step is divided into three parts, each crucial for transforming raw onset data, performing BDMM computations, and collecting summary statistics for patient stratification.
 
-### Part 1: Data transformation
+### Part 1: Data Transformation
 
-Transform your raw onset data into a format suitable for inhomogeneous dynamic Bayesian network (ihDBN) analysis using `transform_onset_to_inhomogenDBN.R`.
+Transform your raw onset data into a format suitable for BDMM analysis (utilizing inhomogeneous dynamic Bayesian networks, ihDBN) using `transform_onset_to_inhomogenDBN.R`.
 
 ```sh
 Rscript transform_onset_to_inhomogenDBN.R -i disease_onsets.csv
@@ -207,7 +207,7 @@ Rscript transform_onset_to_inhomogenDBN.R --help
 **Expected Run Time**
 The execution time for the `transform_onset_to_inhomogenDBN.R` script takes several minutes.
 
-### Part 2: BDMM computations
+### Part 2: BDMM Computations
 
 Execute the BDMM computations for each time slice dataset by running the bash script created in Part 1. This process is designed to run in parallel, significantly optimizing computation time.
 
@@ -222,7 +222,7 @@ bash run_BDMM.sh
 **Expected Run Time**
 The execution time for the `run_BDMM.sh` script can last several hours.
 
-### Part 3: Collecting summary statistics
+### Part 3: Collecting Summary Statistics
 
 Once the BDMM computations are complete, collect summary statistics relevant for patient stratification using `collect_summary_statistics.R`. Ensure this step is initiated only after the completion of Part 2.
 
@@ -244,7 +244,7 @@ Rscript collect_summary_statistics.R --help
 **Expected Run Time**
 The execution time for the `collect_summary_statistics.R` script takes several minutes.
 
-## Step 3: Patient clustering, creating exploratory plots
+## Step 3: Patient Clustering, Creating Exploratory Plots
 
 The final step involves executing `compute_clusters.R` to perform the actual patient clustering based on the processed data and BDMM analysis results.
 
@@ -308,4 +308,4 @@ Options:
 ```
 
 ### Expected Run Time
-The execution time for the `collect_summary_statistics.R` script takes several minutes.
+The execution time for the `compute_clusters.R` script takes several minutes.
