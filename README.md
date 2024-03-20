@@ -93,7 +93,7 @@ The execution time for the `compute_consensual_clusters.R` script can vary from 
 # Full Pipeline
 ## Demo Dataset
 
-A demo dataset is included in this repository that serves as an example of the input data format required by our clustering pipeline. The dataset features basic individual descriptors including Age (real number, in years), Sex (integer), and Income (integer), alongside disease onset information denoted by the age at first diagnosis for a range of diseases encoded with ICD-10 codes (as the remaining columns of the table). Importantly, our pipeline is designed with flexibility in mind and can accommodate disease onset information coded in formats other than ICD-10.
+A demo dataset is included in this repository that serves as an example of the input data format required by our clustering pipeline. The dataset features basic individual descriptors including Age (real number, in years), Sex (integer), and Income (integer), alongside disease onset information denoted by the age at first diagnosis for a range of diseases encoded with ICD-10 codes (as the remaining columns of the table, real numbers, in years). Missing items (indicating a diagnosis is not present) should be coded with `NA`. Importantly, our pipeline is designed with flexibility in mind and can accommodate disease onset information coded in formats other than ICD-10.
 
 ### Accessing the Demo Dataset
 
