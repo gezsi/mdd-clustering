@@ -36,7 +36,7 @@ The R scripts in this repository are designed to run within an R environment. Ke
 - **R Scripts**: To run any R script, navigate to the directory containing the script and execute it in the terminal. Each script includes detailed usage instructions accessible by running the script with the `--help` argument, e.g., `Rscript script_name.R --help`.
 - **bnmcmc Software**: When executing the full pipeline, the appropriate R script will create a parameter file and a bash script that can be used to run this software.
 
-## Compute MDD-related consensual clusters 
+## Compute MDD-related Consensual Clusters on Your Own Dataset
 For users interested in calculating the MDD-related clusters as outlined in our study without running the entire pipeline, you can simply use the `compute_consensual_clusters.R` script (which can be found within the `consensual_clusters` directory of this repository) with your dataset, which should include disease onset information. For guidance on the required format of the input dataset file, please refer to the "Demo Dataset" section below.
 
 ### Outputs
