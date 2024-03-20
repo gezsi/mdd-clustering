@@ -86,7 +86,7 @@ Options:
   -h, --help
       Show this help message and exit.
 ```
-### Required Inputs
+### Required Arguments
 - `-i` argument specifying the disease onset dataset. Ensure your dataset is prepared according to the specified requirements.
 - `--cluster-definitions` argument specifying the cluster definitions. For the MDD-related clusters derived in our study, the `cluster-definitions-all-7.xlsx` file should be used.
 
@@ -323,6 +323,11 @@ Options:
   --onset-intervals=ONSET-INTERVALS
       Onset interval boundaries (format: comma-separated numerical values [of age in years] without spaces) [default: 20,40,60,70].
 ```
+
+### Required Arguments
+- `-i` argument specifying the disease onset dataset. Ensure your dataset is prepared according to the specified requirements. This file should be the one that was used in the earlier steps.
+- `--cohort-profile` argument specifying the comorbidity profile definition based on BDMM analysis results. This could be the directory with the outputs of the BDMM analysis.
+- `--number-of-clusters` argument specifying the desired number of clusters.
 
 ### Expected Run Time
 The execution time for the `compute_clusters.R` script takes several minutes.
