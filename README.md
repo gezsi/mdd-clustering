@@ -77,7 +77,7 @@ Options:
       Name of the ID column (if set, it will be copied to the result files to identify subjects) [default: NA].
 
   --age=AGE
-      Name of the variable 'age' [default: age].
+      Name of the variable 'age' [default: Age].
 
   --onset-intervals=ONSET-INTERVALS
       Onset interval boundaries in the format of comma-separated numerical values (age in years) without spaces
@@ -303,13 +303,13 @@ Options:
       Number of clusters to generate [default: NA].
 
   --age=AGE
-      Name of the variable 'age' [default: age].
+      Name of the variable 'age' [default: Age].
 
   --sex=SEX
-      Name of the variable 'sex' [default: sex].
+      Name of the variable 'sex' [default: Sex].
 
   --household-income=HOUSEHOLD-INCOME
-      Name of the variable 'household income' [default: household_income].
+      Name of the variable 'household income' [default: Income].
 
   --depression=DEPRESSION
       Name of the variable 'depression' (for multiple variables, format as comma-separated strings without spaces) [default: F32,F33].
