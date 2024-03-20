@@ -46,6 +46,8 @@ Running the `compute_consensual_clusters.R` script generates three files in the 
 
 - **Cluster Probabilities (`cluster_probabilities.txt`)**: Contains the probability of each individual's assignment to their respective cluster, offering insights into the confidence of each clustering decision.
 
+- **Cluster Probabilities (Log Odds) (`cluster_probabilities_logodds.txt`)**: Contains the posterior log odds of each individual's assignment to their respective cluster, offering insights into the confidence of each clustering decision. These output variables were used in our study as dependent variables in regression analyses and genome-wide association calculations.
+
 - **Cluster Variables (`cluster_variables.txt`)**: Details the variables that were considered in defining the clusters, enriching the context for interpreting the clustering results.
 
 ### How to Run
@@ -84,8 +86,17 @@ Options:
   -h, --help
       Show this help message and exit.
 ```
+### Required Inputs
+- `-i` argument specifying the disease onset dataset. Ensure your dataset is prepared according to the specified requirements.
+- `--cluster-definitions` argument specifying the cluster definitions. For the MDD-related clusters derived in our study, the `cluster-definitions-all-7.xlsx` file should be used.
 
-Ensure your dataset is prepared according to the specified requirements and use the appropriate command line arguments to tailor the script's execution to your needs.
+### Example Usage on Demo Data
+
+Execute the following command within the `consensual_clusters` folder:
+
+```sh
+Rscript compute_consensual_clusters.R -i ../data/demo_dataset.csv --cluster-definitions=cluster-definitions-all-7.xlsx
+```
 
 ### Expected Run Time
 The execution time for the `compute_consensual_clusters.R` script can vary from 1 to 15 minutes, primarily dependent on the size of the dataset being analyzed.
@@ -97,7 +108,7 @@ A demo dataset is included in this repository that serves as an example of the i
 
 ### Accessing the Demo Dataset
 
-The demo dataset can be found within the `demo_data` directory of this repository. To begin exploring this example, navigate to the directory, and you will find the dataset file named `demo_dataset.csv`. This file is structured to provide a clear representation of the type of data our clustering pipeline analyzes, demonstrating the format and type of information required.
+The demo dataset can be found within the `data` directory of this repository. To begin exploring this example, navigate to the directory, and you will find the dataset file named `demo_dataset.csv`. This file is structured to provide a clear representation of the type of data our clustering pipeline analyzes, demonstrating the format and type of information required.
 
 #### Sample Snippet from Demo Dataset:
 
@@ -116,11 +127,11 @@ Age,Sex,Income,A01,A02,A03,A04,A05,A06,A07,A08,A09,A15,A16,...
 
 *Note: This is a simplified example. Please refer to the actual `demo_dataset.csv` file for a comprehensive view.*
 
-To utilize this dataset with our clustering pipeline, simply follow the instructions provided in the `Usage` section, substituting your data paths with those leading to the `demo_dataset.csv` file within the `demo_data` directory.
+To utilize this dataset with our clustering pipeline, simply follow the instructions provided in the `Usage` section, substituting your data paths with those leading to the `demo_dataset.csv` file within the `data` directory.
 
 ## Step 1: Dataset Check with `check_dataset.R`, collecting descriptive statistics, creating exploratory plots
 
-The initial step in our full pipeline involves running the `check_dataset.R` script on your dataset. This script conducts a basic data sanity check to ensure the dataset is properly formatted and complete for further analysis.
+The initial step in our full pipeline involves running the `pipeline/step1/check_dataset.R` script on your dataset. This script conducts a basic data sanity check to ensure the dataset is properly formatted and complete for further analysis.
 
 ### What it Checks
 
@@ -139,7 +150,7 @@ Upon successful execution, the script:
 
 ### How to Run
 
-Open your terminal and execute the following command for usage instructions:
+Open your terminal and execute the following command for usage instructions in the `pipeline/step1` folder:
 
 ```sh
 Rscript check_dataset.R --help
@@ -166,6 +177,9 @@ Options:
   --depression=DEPRESSION
       Name of the variable 'depression' (for multiple variables, format as comma-separated strings without spaces) [default: F32,F33].
 
+	--codetable=CODETABLE
+		  Filename for code table containing disease names for each disease code (columns of the input file) [default: NA]
+
   -r REMOVE, --remove=REMOVE
       Names of variables to remove (format: comma-separated strings without spaces).
 
@@ -182,18 +196,30 @@ Options:
 ### Expected Run Time
 The execution time for the `check_dataset.R` script can last several hours, which can be reduced to several minutes by disabling the creation of plots (`--no-plot` argument).
 
+### Optional Argument
+
+The `--codetable` argument can be used to assign disease descriptions to the output prevalence tables. For ICD-10 codes, the provided `data/disease_ICD_10.xlsx` file can be used. Check this file if you have specific needs.
+
+### Example Usage on Demo Data
+
+Execute the following command within the `pipeline/step1` folder:
+
+```sh
+Rscript check_dataset.R -i ../../data/demo_dataset.csv --codetable=../../data/disease_ICD_10.xlsx
+```
+
 ## Step 2: Data Transformation and Calculation of Relevance Scores Using Inhomogeneous Dynamic Bayesian Networks
-This step is divided into three parts, each crucial for transforming raw onset data, performing BDMM computations, and collecting summary statistics for patient stratification.
+This step is divided into two parts: the first for transforming raw onset data and the second for performing BDMM computations.
 
 ### Part 1: Data Transformation
 
-Transform your raw onset data into a format suitable for BDMM analysis (utilizing inhomogeneous dynamic Bayesian networks, ihDBN) using `transform_onset_to_inhomogenDBN.R`.
+Transform your raw onset data into a format suitable for BDMM analysis (utilizing inhomogeneous dynamic Bayesian networks, ihDBN) using `pipeline/step2/transform_onset_to_inhomogenDBN.R`.
 
 ```sh
 Rscript transform_onset_to_inhomogenDBN.R -i disease_onsets.csv
 ```
 
-Open your terminal and execute the following command for detailed usage instructions:
+Open your terminal and execute the following command for detailed usage instructions in the `pipeline/step2` folder:
 
 ```sh
 Rscript transform_onset_to_inhomogenDBN.R --help
@@ -207,6 +233,13 @@ Rscript transform_onset_to_inhomogenDBN.R --help
 **Expected Run Time**
 The execution time for the `transform_onset_to_inhomogenDBN.R` script takes several minutes.
 
+**Example Usage on Demo Data**
+Execute the following command within the `pipeline/step2` folder:
+
+```sh
+Rscript transform_onset_to_inhomogenDBN.R -i ../../data/demo_dataset.csv
+```
+
 ### Part 2: BDMM Computations
 
 Execute the BDMM computations for each time slice dataset by running the bash script created in Part 1. This process is designed to run in parallel, significantly optimizing computation time.
@@ -215,6 +248,9 @@ Execute the BDMM computations for each time slice dataset by running the bash sc
 bash run_BDMM.sh
 ```
 
+**Note:**
+Please ensure to grant executable permissions to the `bnmcmc.exe` file.
+
 **Outputs:**
 - Log files documenting the computation process.
 - Output files for each time slice (`bdmm_output_*`).
@@ -222,31 +258,9 @@ bash run_BDMM.sh
 **Expected Run Time**
 The execution time for the `run_BDMM.sh` script can last several hours.
 
-### Part 3: Collecting Summary Statistics
-
-Once the BDMM computations are complete, collect summary statistics relevant for patient stratification using `collect_summary_statistics.R`. Ensure this step is initiated only after the completion of Part 2.
-
-```sh
-Rscript collect_summary_statistics.R -i disease_onsets.csv -d <path/to/directory>
-```
-
-Open your terminal and execute the following command for detailed usage instructions:
-
-```sh
-Rscript collect_summary_statistics.R --help
-```
-
-**Note:** The onset intervals and variable names should remain consistent with those used in Part 1.
-
-**Outputs:**
-- Summary statistic files (`summary_*`) for the variable sets, aiding in patient stratification (see Step 3).
-
-**Expected Run Time**
-The execution time for the `collect_summary_statistics.R` script takes several minutes.
-
 ## Step 3: Patient Clustering, Creating Exploratory Plots
 
-The final step involves executing `compute_clusters.R` to perform the actual patient clustering based on the processed data and BDMM analysis results.
+The final step involves executing `pipeline/step3/compute_clusters.R` to perform the actual patient clustering based on the processed data and BDMM analysis results.
 
 ## Outputs
 
@@ -264,7 +278,7 @@ Upon successful execution of `compute_clusters.R`, the script generates the foll
 
 ### How to Run
 
-Open your terminal and execute the following command for usage instructions:
+Open your terminal and execute the following command for usage instructions in the `pipeline/step3` folder::
 
 ```sh
 Rscript compute_clusters.R --help
@@ -300,6 +314,9 @@ Options:
   --depression=DEPRESSION
       Name of the variable 'depression' (for multiple variables, format as comma-separated strings without spaces) [default: F32,F33].
 
+	--codetable=CODETABLE
+		  Filename for code table containing disease names for each disease code (columns of the input file) [default: NA]
+
   --id=ID
       Name of ID column (will be included in result files to identify subjects) [default: NA].
 
@@ -309,3 +326,10 @@ Options:
 
 ### Expected Run Time
 The execution time for the `compute_clusters.R` script takes several minutes.
+
+### Example Usage on Demo Data
+Execute the following command within the `pipeline/step3` folder:
+
+```sh
+Rscript compute_clusters.R -i ../../data/demo_dataset.csv --cohort-profile=../step2 --number-of-clusters=5
+```
