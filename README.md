@@ -1,4 +1,4 @@
-# Unique genetic and risk-factor profiles in multimorbidity clusters of depression-related disease trajectories from a study of 1.2 million subjects
+# Unique genetic and risk-factor profiles in clusters of major depressive disorder-related multimorbidity trajectories [from a study of 1.2 million subjects]
 
 This repository houses all the software and R scripts utilized in the clustering pipeline as detailed in our study. Within, users will find the resources and instructions needed to replicate our clustering methodology and conduct analyses using our approach.
 
